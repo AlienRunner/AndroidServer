@@ -20,11 +20,27 @@ public class ServerThread extends Thread {
         
         public void run(){
                 
-                
+                /* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	/* DEN HÄR KLASSEN BEHÖVS INTE LÄNGRE MEN SPARAR DEN JUST-IN-CASE  */
+        	
                 try{
                         System.out.println("Starting Socket thread...");
                         
-                        serverSocket = new ServerSocket(21111); //implements the server side of the connection 
+                        serverSocket = new ServerSocket(21101); //implements the server side of the connection 
                         System.out.println("ServerSocket created, waiting for android device...");
                         
                         Socket socket = serverSocket.accept(); //implements the client side of the connection
@@ -44,8 +60,8 @@ public class ServerThread extends Thread {
                                         System.out.println("Coordinates recieved: " + incomingCoordinates + ". Answering...");
                                         
                                // send a message
-                    String outgoingMsg = "Message \"" + incomingCoordinates
-                            + "\" recieved on server."
+                    String outgoingMsg = "Server reply: Hi I just received this message: \"" + incomingCoordinates
+                            + "\"."
                             + System.getProperty("line.separator");
                     out.write(outgoingMsg);
                     out.flush();
