@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.HashMap;
@@ -48,7 +46,7 @@ public class MiniServer extends Thread {
                  }
                  
                  if (socket.isConnected()){
-                         System.out.println("Socket still connected");
+                         //System.out.println("Socket still connected");
                  }else {
                          System.out.println("Socket not connected");
                  }
