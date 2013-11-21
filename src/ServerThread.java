@@ -24,7 +24,7 @@ public class ServerThread extends Thread {
                 try{
                         System.out.println("Starting Socket thread...");
                         
-                        serverSocket = new ServerSocket(21111); //implements the server side of the connection 
+                        serverSocket = new ServerSocket(21101); //implements the server side of the connection 
                         System.out.println("ServerSocket created, waiting for android device...");
                         
                         Socket socket = serverSocket.accept(); //implements the client side of the connection
