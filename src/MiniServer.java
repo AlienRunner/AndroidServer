@@ -12,10 +12,15 @@ public class MiniServer extends Thread {
     String incomingCoordinates;
     HashMap<SocketAddress, Coords> map = new HashMap<SocketAddress, Coords>();
     String ip;
-    
+	DatabaseStarter dbs = new DatabaseStarter();
+
+	
 	public MiniServer(Socket socket){
 		super("MiniServer");
 		this.socket = socket;
+		dbs.createConnection();
+		DatabaseHandler dbh = new DatabaseHandler();
+		String t = dbh.setAndFetch(40, 30, "Johan");
 	}
 	
 	public void run(){
