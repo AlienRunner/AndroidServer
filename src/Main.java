@@ -10,7 +10,17 @@ public class Main {
          */
         public static void main(String[] args) throws IOException{
         	ServerSocket serverSocket = null;
+        	DatabaseStarter dbs = new DatabaseStarter();
+        	dbs.createConnection();
+        	DatabaseHandler dbh = new DatabaseHandler();
+        	String t = dbh.setAndFetch(40, 30, "Johan");
+        //	int x =3;
+        //	int y =3;
+        //	String userId = "hej";
         	
+      // 	System.out.println("update users set xcoord="+x+",ycoord="+y+
+		//		" where userId="+"'"+userId+"'");
+        	System.out.println(t);
         	boolean listeningSocket = true;
         	try {
                 System.out.println("Starting Socket thread...");
