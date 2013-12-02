@@ -26,6 +26,29 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 		list = new ArrayList<String>();
 		gson = new Gson();
 	}
+	//userString is the recived string from client from class named databaseHandler
+	//method setAndFetch needs to send a string to server which is picked up and sent here
+	public void updateDatabase(String userString){
+		userString = userString.replace("[", "");
+		userString = userString.replace("]", "");
+		userString = userString.replace("\"", "");
+		String[] user = userString.split(",");
+		try {
+			String sql = "update users set xcoord=?,ycoord=? where userId="+"'"+user[0]+"'";
+			preparedStatement = con.prepareStatement(sql);
+			preparedStatement.setDouble(1,Double.parseDouble(user[1])); 
+			preparedStatement.setDouble(2,Double.parseDouble(user[2]));
+			preparedStatement.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
+		//uppdatera om usern finns
+	}
 
 	@Override
 	public String setAndFetch(double x, double y, String userId) {
