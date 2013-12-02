@@ -1,5 +1,13 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.*;
 
 public class DatabaseHandler implements DatabaseHandlerInterface {
@@ -36,8 +44,14 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 		String s  = gson.toJson(list);
 		return s;
 	}
+public String[] JsonToUser(){
+	String s = "{menu:{\"1\":\"sql\", \"2\":\"android\", \"3\":\"mvc\"}}";
+	 
+	String[] b = s.split(",");
+	return b;
+	}
 	
-
+	
 	private ArrayList<String> getUserInformation() throws SQLException {
 		statement = con.createStatement();
 		resultSet = statement
