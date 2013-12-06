@@ -18,6 +18,13 @@ public class Main {
 
 //        	int x =3;
 //        	int y =3;
+        	StringBuilder sb = new StringBuilder("userString");
+    		sb.substring(1, sb.length());
+    		System.out.println(sb.toString());
+    		
+    		
+
+    		
 //        	String userId = "hej";
 //        	String t;
 //        	DatabaseStarter dbs = new DatabaseStarter();

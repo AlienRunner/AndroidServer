@@ -37,7 +37,12 @@ public class MiniServer extends Thread {
                  
                  while ((incomingMessage = in.readLine()) != null && socket.isConnected()){
                 	 try{
+                		 if(incomingMessage.charAt(0)==1){
+                			 dbh.insertIntoDatabase(incomingMessage);
+                		 }
+                	 else if (incomingMessage.charAt(0)==2){
                 			dbh.updateDatabase(incomingMessage);
+                	 }
                 	 }catch (Exception e){
                 		 System.out.println("Username already exist");
                 		 e.printStackTrace();
