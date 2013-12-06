@@ -26,7 +26,7 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 		list = new ArrayList<String>();
 		gson = new Gson();
 	}
-	//userString is the recived string from client from class named databaseHandler
+	//userString is the received string from client from class named databaseHandler
 	//method setAndFetch needs to send a string to server which is picked up and sent here
 	public void updateDatabase(String userString){
 		userString = userString.replace("[", "");

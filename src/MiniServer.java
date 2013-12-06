@@ -13,6 +13,7 @@ public class MiniServer extends Thread {
     HashMap<SocketAddress, Coords> map = new HashMap<SocketAddress, Coords>();
     String ip;
 	DatabaseStarter dbs = new DatabaseStarter();
+	private String t;
 
 	
 	public MiniServer(Socket socket){
@@ -20,7 +21,7 @@ public class MiniServer extends Thread {
 		this.socket = socket;
 		dbs.createConnection();
 		DatabaseHandler dbh = new DatabaseHandler();
-		String t = dbh.setAndFetch(40, 30, "Johan");
+		t = dbh.setAndFetch(40, 30, "Johan");
 	}
 	
 	public void run(){
@@ -41,8 +42,8 @@ public class MiniServer extends Thread {
                          System.out.println("Coordinates recieved: " + incomingCoordinates + ". Answering...");
                          
                          // send a message
-                         String outgoingMsg = "Server reply: Hi I just received this message: \"" + incomingCoordinates
-                        		 + "\"." + System.getProperty("line.separator");
+                         String outgoingMsg = t  + System.getProperty("line.separator");
+                         
                          out.write(outgoingMsg);
                          out.flush();
      

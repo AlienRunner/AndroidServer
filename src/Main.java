@@ -3,18 +3,30 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 public class Main {
 
         /**
          * @param args
+         * @throws JSONException 
          */
-        public static void main(String[] args) throws IOException{
+        public static void main(String[] args) throws IOException, JSONException{
         	ServerSocket serverSocket = null;
 
         //	int x =3;
         //	int y =3;
         //	String userId = "hej";
-        	
+        	String t;
+        	DatabaseStarter dbs = new DatabaseStarter();
+        	dbs.createConnection();
+    		DatabaseHandler dbh = new DatabaseHandler();
+    		t = dbh.setAndFetch(40, 30, "Johan");
+    		String[] md = dbh.JsonToUser();
+    		System.out.println(t);
+    		System.out.println(md[1]);
       // 	System.out.println("update users set xcoord="+x+",ycoord="+y+
 		//		" where userId="+"'"+userId+"'");
 
