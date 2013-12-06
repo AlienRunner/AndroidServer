@@ -29,9 +29,11 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 	//userString is the received string from client from class named databaseHandler
 	//method setAndFetch needs to send a string to server which is picked up and sent here
 	public void updateDatabase(String userString){
+		StringBuilder sb = new StringBuilder(userString);
+		sb.substring(1, sb.length());
+		userString = sb.toString();
 		userString = userString.replace("[", "");
 		userString = userString.replace("]", "");
-		userString = userString.replace("\"", "");
 		String[] user = userString.split(",");
 		try {
 			String sql = "update users set xcoord=?,ycoord=? where userId="+"'"+user[0]+"'";
@@ -48,6 +50,29 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 	
 		
 		//uppdatera om usern finns
+	}
+	
+	public void insertIntoDatabase(String userString){
+		StringBuilder sb = new StringBuilder(userString);
+		sb.substring(1, sb.length());
+		userString = sb.toString();
+		userString = userString.replace("[", "");
+		userString = userString.replace("]", "");
+		String[] user = userString.split(",");
+		try {
+			String sql = "insert into table users set userId=?,xcoord=?,ycoord=?,race=?";
+			preparedStatement = con.prepareStatement(sql);
+			preparedStatement.setString(1,user[0]); 
+			preparedStatement.setDouble(2,Double.parseDouble(user[1]));
+			preparedStatement.setDouble(3,Double.parseDouble(user[2]));
+			preparedStatement.setString(4,user[3]);
+			preparedStatement.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -78,7 +103,7 @@ public String[] JsonToUser(){
 	private ArrayList<String> getUserInformation() throws SQLException {
 		statement = con.createStatement();
 		resultSet = statement
-				.executeQuery("select userId,xcoord,ycoord from users");
+				.executeQuery("select userId,xcoord,ycoord,race from users");
 		ArrayList<String> userArrayList = writeResultSet(resultSet);
 		return userArrayList;
 	}
@@ -96,9 +121,11 @@ public String[] JsonToUser(){
 			String userId = resultSet.getString(1);
 			String xCoord = resultSet.getString(2);
 			String yCoord = resultSet.getString(3);
+			String race = resultSet.getString(4);
 			list.add(userId);
 			list.add(xCoord);
 			list.add(yCoord);
+			list.add(race);
 
 		}
 		return list;
