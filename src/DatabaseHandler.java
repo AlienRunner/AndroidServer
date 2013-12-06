@@ -30,7 +30,7 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 	//method setAndFetch needs to send a string to server which is picked up and sent here
 	public void updateDatabase(String userString){
 		StringBuilder sb = new StringBuilder(userString);
-		sb.substring(1, sb.length());
+		userString = sb.substring(1, sb.length()).toString();
 		userString = sb.toString();
 		userString = userString.replace("[", "");
 		userString = userString.replace("]", "");
@@ -54,8 +54,7 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 	
 	public void insertIntoDatabase(String userString){
 		StringBuilder sb = new StringBuilder(userString);
-		sb.substring(1, sb.length());
-		userString = sb.toString();
+		userString = sb.substring(1, sb.length()).toString();
 		userString = userString.replace("[", "");
 		userString = userString.replace("]", "");
 		String[] user = userString.split(",");
