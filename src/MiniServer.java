@@ -9,10 +9,11 @@ import java.util.HashMap;
 
 public class MiniServer extends Thread {
 	private Socket socket = null;
-    String incomingCoordinates;
+    String incomingMessage;
     HashMap<SocketAddress, Coords> map = new HashMap<SocketAddress, Coords>();
     String ip;
 	DatabaseStarter dbs = new DatabaseStarter();
+	DatabaseHandler dbh = new DatabaseHandler();
 	private String t;
 
 	
@@ -20,7 +21,7 @@ public class MiniServer extends Thread {
 		super("MiniServer");
 		this.socket = socket;
 		dbs.createConnection();
-		DatabaseHandler dbh = new DatabaseHandler();
+		
 		t = dbh.setAndFetch(40, 30, "Johan");
 	}
 	
@@ -34,12 +35,19 @@ public class MiniServer extends Thread {
 			 while (true){
                  
                  
-                 while ((incomingCoordinates = in.readLine()) != null && socket.isConnected()){
+                 while ((incomingMessage = in.readLine()) != null && socket.isConnected()){
+                	 try{
+                			dbh.updateDatabase(incomingMessage);
+                	 }catch (Exception e){
+                		 System.out.println("Username already exist");
+                		 e.printStackTrace();
+                	 }
+                	 
                          SocketAddress ipAddress = socket.getRemoteSocketAddress();
                          if(map.containsKey(ipAddress) == false){
-                                 map.put(ipAddress, new Coords(incomingCoordinates));
+                                 map.put(ipAddress, new Coords(incomingMessage));
                          }
-                         System.out.println("Coordinates recieved: " + incomingCoordinates + ". Answering...");
+                         System.out.println("Coordinates recieved: " + incomingMessage + ". Answering...");
                          
                          // send a message
                          String outgoingMsg = t  + System.getProperty("line.separator");

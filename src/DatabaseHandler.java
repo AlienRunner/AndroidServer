@@ -31,7 +31,6 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 	public void updateDatabase(String userString){
 		userString = userString.replace("[", "");
 		userString = userString.replace("]", "");
-		userString = userString.replace("\"", "");
 		String[] user = userString.split(",");
 		try {
 			String sql = "update users set xcoord=?,ycoord=? where userId="+"'"+user[0]+"'";
@@ -48,6 +47,26 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 	
 		
 		//uppdatera om usern finns
+	}
+	
+	public void insertIntoDatabase(String userString){
+		userString = userString.replace("[", "");
+		userString = userString.replace("]", "");
+		String[] user = userString.split(",");
+		try {
+			String sql = "insert into table users set userId=?,xcoord=?,ycoord=?,race=?";
+			preparedStatement = con.prepareStatement(sql);
+			preparedStatement.setString(1,user[0]); 
+			preparedStatement.setDouble(2,Double.parseDouble(user[1]));
+			preparedStatement.setDouble(3,Double.parseDouble(user[2]));
+			preparedStatement.setString(4,user[3]);
+			preparedStatement.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
