@@ -9,8 +9,7 @@ import java.util.HashMap;
 public class MiniServer extends Thread {
 	private Socket socket = null;
 	private String incomingMessage;
-	private HashMap<SocketAddress, String> map;
-	private String ip;
+	private HashMap<String, SocketAddress> map;
 	private DatabaseStarter dbs;
 	private DatabaseHandler dbh;
 	private String jsonList;
@@ -19,7 +18,7 @@ public class MiniServer extends Thread {
 		super("MiniServer");
 		this.socket = socket;
 		this.dbs.createConnection();
-		this.map = new HashMap<SocketAddress, String>();
+		this.map = new HashMap<String, SocketAddress>();
 		this.dbs = new DatabaseStarter();
 		this.dbh = new DatabaseHandler();
 	}
@@ -27,41 +26,47 @@ public class MiniServer extends Thread {
 	public void run() {
 		System.out.println("Someone connected");
 		System.out.println(socket.getRemoteSocketAddress());
-
+		SocketAddress ipAddress = socket.getRemoteSocketAddress();
 		try {
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+					socket.getOutputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
 			while (true) {
 				while ((incomingMessage = in.readLine()) != null && socket.isConnected()) {
-					try {
-						System.out.println("Trying to add username");
-						User user = decode(incomingMessage);
-						if(dbh.updateDatabase(user)){
-							jsonList = dbh.setAndFetch(user);							
-						}else{
-							jsonList = "Couldn't update db!";
+					User user = decode(incomingMessage);
+					if (map.containsKey(user.getUserId()) == false) {
+						map.put(user.getUserId(), ipAddress);
+						try {
+							System.out.println("Trying to add username");
+							if (dbh.updateDatabase(user)) {
+								jsonList = dbh.setAndFetch(user);
+							} else {
+								jsonList = "Couldn't update db!";
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+							jsonList = "Failed to update!";
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						jsonList = "Failed to update!";
+
+					} else {
+						jsonList = "Username already in use!";
 					}
-					SocketAddress ipAddress = socket.getRemoteSocketAddress();
-					if (map.containsKey(ipAddress) == false) {
-						map.put(ipAddress, incomingMessage);
-					}
-					System.out.println("ClientInfo recieved: " + incomingMessage + ". Answering...");
+					System.out.println("ClientInfo recieved: "
+							+ incomingMessage + ". Answering...");
 					out.write(jsonList + System.getProperty("line.separator"));
 					out.flush();
-					System.out.println("Message sent: " + jsonList + System.getProperty("line.separator"));
-				}
-
-				if (socket.isConnected() == false) {
-					System.out.println("Socket closed!");
+					System.out.println("Message sent: " + jsonList
+							+ System.getProperty("line.separator"));
+					if (socket.isConnected() == false) {
+						System.out.println("Socket closed!");
+					}
 				}
 			}
 
 		} catch (Exception e) {
-			System.out.println("BufferedWriter/Reader - Error: " + e.getMessage());
+			System.out.println("BufferedWriter/Reader - Error: "
+					+ e.getMessage());
 			e.printStackTrace();
 		}
 	}

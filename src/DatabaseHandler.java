@@ -28,7 +28,6 @@ public class DatabaseHandler {
 	}
 
 	public boolean updateDatabase(User user) {
-		String status = "inserted";
 		if(checkIfExist(user)){	
 			try {
 				String sql = "update users set xcoord=?,ycoord=? where userId="
@@ -37,7 +36,6 @@ public class DatabaseHandler {
 				preparedStatement.setDouble(1,user.getxCoord());
 				preparedStatement.setDouble(2,user.getyCoord());
 				preparedStatement.executeUpdate();
-				status = "updated";
 				return true;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
