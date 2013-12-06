@@ -17,10 +17,12 @@ public class MiniServer extends Thread {
 	public MiniServer(Socket socket) {
 		super("MiniServer");
 		this.socket = socket;
-		this.dbs.createConnection();
-		this.map = new HashMap<String, SocketAddress>();
-		this.dbs = new DatabaseStarter();
-		this.dbh = new DatabaseHandler();
+		System.out.println("MiniSocket CREATED!");
+		dbs = new DatabaseStarter();
+		dbs.createConnection();
+		System.out.println("DB CREATED!");
+		map = new HashMap<String, SocketAddress>();
+		dbh = new DatabaseHandler();
 	}
 
 	public void run() {
@@ -40,6 +42,7 @@ public class MiniServer extends Thread {
 						try {
 							System.out.println("Trying to add username");
 							if (dbh.updateDatabase(user)) {
+								System.out.println("UPDATED DB!");
 								jsonList = dbh.setAndFetch(user);
 							} else {
 								jsonList = "Couldn't update db!";

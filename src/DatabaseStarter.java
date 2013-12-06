@@ -1,6 +1,5 @@
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.Date;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,8 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseStarter {
-	private String driverName = "com.mysql.jdbc.Driver";
-	private Connection con = null;
+	String driverName = "com.mysql.jdbc.Driver";
+	Connection con = null;
 
 	public DatabaseStarter() {
 		try {
@@ -35,6 +34,15 @@ public class DatabaseStarter {
 		return con;
 	}
 
+	public void writeResultSet(ResultSet resultSet) throws SQLException {
+		while (resultSet.next()) {
+			String user = resultSet.getString(1);
+			String xCoord = resultSet.getString(2);
+			String yCoord = resultSet.getString(3);
+			System.out.println("User: " + user + xCoord + yCoord);
+		}
+	}
+
 	public void closeConnection() {
 		try {
 			this.con.close();
@@ -44,5 +52,4 @@ public class DatabaseStarter {
 			System.out.println(e.toString());
 		}
 	}
-
 }

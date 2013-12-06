@@ -22,6 +22,7 @@ public class DatabaseHandler {
 
 	public DatabaseHandler() {
 		dbs = new DatabaseStarter();
+		dbs.createConnection();
 		con = dbs.createConnection();
 		list = new ArrayList<String>();
 		gson = new Gson();
@@ -29,12 +30,14 @@ public class DatabaseHandler {
 
 	public boolean updateDatabase(User user) {
 		if(checkIfExist(user)){	
+			System.out.println("USEREXIST");
 			try {
-				String sql = "update users set xcoord=?,ycoord=? where userId="
+				String sql = "update users set xcoord=?, ycoord=?, race=? where userId="
 					+ "'" + user.getUserId() + "'";
 				preparedStatement = con.prepareStatement(sql);
 				preparedStatement.setDouble(1,user.getxCoord());
 				preparedStatement.setDouble(2,user.getyCoord());
+				preparedStatement.setString(3,user.getRace());
 				preparedStatement.executeUpdate();
 				return true;
 			} catch (SQLException e) {
@@ -43,6 +46,7 @@ public class DatabaseHandler {
 				return false;
 			}
 		}else{
+			System.out.println("USER DIDNT EXIST");
 			insertIntoDatabase(user);
 			return true;
 		}
@@ -63,8 +67,9 @@ public class DatabaseHandler {
 	}
 
 	public void insertIntoDatabase(User user) {
+		System.out.println("TRYING TO INSERT USER");
 		try {
-			String sql = "insert into table users set userId=?,xcoord=?,ycoord=?,race=?";
+			String sql = "insert into users (userId,xcoord,ycoord,race) values(?,?,?,?)";
 			preparedStatement = con.prepareStatement(sql);
 			preparedStatement.setString(1, user.getUserId());
 			preparedStatement.setDouble(2, user.getxCoord());
@@ -72,12 +77,14 @@ public class DatabaseHandler {
 			preparedStatement.setString(4, user.getRace());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("FAILED TO INSERT USER:" + user.getUserId());
 			e.printStackTrace();
 		}
+		System.out.println("INSERTED USER:" + user.getUserId());
 	}
 
 	public String setAndFetch(User user) {
+		System.out.println("SET AND FETCH");
 		try {
 			String sql = "update users set xcoord=?,ycoord=? where userId="
 					+ "'" + user.getUserId() + "'";
