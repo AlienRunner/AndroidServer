@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import com.google.gson.*;
 
-public class DatabaseHandler implements DatabaseHandlerInterface {
+public class DatabaseHandler {
 
 	private DatabaseStarter dbs;
 	private Statement statement;
@@ -26,97 +26,86 @@ public class DatabaseHandler implements DatabaseHandlerInterface {
 		list = new ArrayList<String>();
 		gson = new Gson();
 	}
-	//userString is the received string from client from class named databaseHandler
-	//method setAndFetch needs to send a string to server which is picked up and sent here
-	public void updateDatabase(String userString){
-		StringBuilder sb = new StringBuilder(userString);
-		userString = sb.substring(1, sb.length()).toString();
-		userString = sb.toString();
-		userString = userString.replace("[", "");
-		userString = userString.replace("]", "");
-		String[] user = userString.split(",");
+
+	public boolean updateDatabase(User user) {
+		String status = "inserted";
+		if(checkIfExist(user)){	
+			try {
+				String sql = "update users set xcoord=?,ycoord=? where userId="
+					+ "'" + user.getUserId() + "'";
+				preparedStatement = con.prepareStatement(sql);
+				preparedStatement.setDouble(1,user.getxCoord());
+				preparedStatement.setDouble(2,user.getyCoord());
+				preparedStatement.executeUpdate();
+				status = "updated";
+				return true;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		}else{
+			insertIntoDatabase(user);
+			return true;
+		}
+	}
+	
+	public boolean checkIfExist(User user) {
 		try {
-			String sql = "update users set xcoord=?,ycoord=? where userId="+"'"+user[0]+"'";
+			String sql = "Select * from users where userId="
+				+ "'" + user.getUserId() + "'";
 			preparedStatement = con.prepareStatement(sql);
-			preparedStatement.setDouble(1,Double.parseDouble(user[1])); 
-			preparedStatement.setDouble(2,Double.parseDouble(user[2]));
-			preparedStatement.executeUpdate();
-			
-			
+			ResultSet rs = preparedStatement.executeQuery();
+			return rs.next();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-		
-		//uppdatera om usern finns
+		return false;
 	}
-	
-	public void insertIntoDatabase(String userString){
-		StringBuilder sb = new StringBuilder(userString);
-		userString = sb.substring(1, sb.length()).toString();
-		userString = userString.replace("[", "");
-		userString = userString.replace("]", "");
-		String[] user = userString.split(",");
+
+	public void insertIntoDatabase(User user) {
 		try {
 			String sql = "insert into table users set userId=?,xcoord=?,ycoord=?,race=?";
 			preparedStatement = con.prepareStatement(sql);
-			preparedStatement.setString(1,user[0]); 
-			preparedStatement.setDouble(2,Double.parseDouble(user[1]));
-			preparedStatement.setDouble(3,Double.parseDouble(user[2]));
-			preparedStatement.setString(4,user[3]);
+			preparedStatement.setString(1, user.getUserId());
+			preparedStatement.setDouble(2, user.getxCoord());
+			preparedStatement.setDouble(3, user.getyCoord());
+			preparedStatement.setString(4, user.getRace());
 			preparedStatement.executeUpdate();
-			
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	@Override
-	public String setAndFetch(double x, double y, String userId) {
+	public String setAndFetch(User user) {
 		try {
-			String sql = "update users set xcoord=?,ycoord=? where userId="+"'"+userId+"'";
+			String sql = "update users set xcoord=?,ycoord=? where userId="
+					+ "'" + user.getUserId() + "'";
 			preparedStatement = con.prepareStatement(sql);
-			preparedStatement.setDouble(1,x); 
-			preparedStatement.setDouble(2,y);
+			preparedStatement.setDouble(1, user.getxCoord());
+			preparedStatement.setDouble(2, user.getyCoord());
 			preparedStatement.executeUpdate();
 			list = getUserInformation();
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String s  = gson.toJson(list);
+		String s = gson.toJson(list);
 		return s;
 	}
-public String[] JsonToUser(){
-	String s = "{menu:{\"1\":\"sql\", \"2\":\"android\", \"3\":\"mvc\"}}";
-	 
-	String[] b = s.split(",");
-	return b;
-	}
-	
-	
+
 	private ArrayList<String> getUserInformation() throws SQLException {
 		statement = con.createStatement();
-		resultSet = statement
-				.executeQuery("select userId,xcoord,ycoord,race from users");
+		resultSet = statement.executeQuery("select userId,xcoord,ycoord,race from users");
 		ArrayList<String> userArrayList = writeResultSet(resultSet);
 		return userArrayList;
 	}
 
-	private ArrayList<String> writeResultSet(ResultSet resultSet)
-			throws SQLException {
-		// ResultSet is initially before the first data set
-
+	private ArrayList<String> writeResultSet(ResultSet resultSet) throws SQLException {
 		ArrayList<String> list = new ArrayList<String>();
 		while (resultSet.next()) {
-			// It is possible to get the columns via name
-			// also possible to get the columns via the column number
-			// which starts at 1
-			// e.g. resultSet.getSTring(2);
 			String userId = resultSet.getString(1);
 			String xCoord = resultSet.getString(2);
 			String yCoord = resultSet.getString(3);
@@ -125,16 +114,7 @@ public String[] JsonToUser(){
 			list.add(xCoord);
 			list.add(yCoord);
 			list.add(race);
-
 		}
 		return list;
-
-		// Date date = resultSet.getDate("datum");
-		// String comment = resultSet.getString("comments");
-		// System.out.println("User: " + userId);
-		// System.out.println("Website: " + website);
-		// System.out.println("Summary: " + summary);
-		// System.out.println("Date: " + date);
-		// System.out.println("Comment: " + comment);
 	}
 }
