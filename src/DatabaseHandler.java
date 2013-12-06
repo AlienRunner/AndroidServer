@@ -97,7 +97,7 @@ public String[] JsonToUser(){
 	private ArrayList<String> getUserInformation() throws SQLException {
 		statement = con.createStatement();
 		resultSet = statement
-				.executeQuery("select userId,xcoord,ycoord from users");
+				.executeQuery("select userId,xcoord,ycoord,race from users");
 		ArrayList<String> userArrayList = writeResultSet(resultSet);
 		return userArrayList;
 	}
@@ -115,9 +115,11 @@ public String[] JsonToUser(){
 			String userId = resultSet.getString(1);
 			String xCoord = resultSet.getString(2);
 			String yCoord = resultSet.getString(3);
+			String race = resultSet.getString(4);
 			list.add(userId);
 			list.add(xCoord);
 			list.add(yCoord);
+			list.add(race);
 
 		}
 		return list;
