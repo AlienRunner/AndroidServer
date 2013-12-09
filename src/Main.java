@@ -9,13 +9,15 @@ public class Main {
 	ServerSocket serverSocket = null;
 	private static int port = 21101;
 	private static int maxConnections = 0;
+	private static DatabaseHandler dbh;
 
 	/**
 	 * @param args
 	 * @throws JSONException
 	 */
 	public static void main(String[] args) throws IOException, JSONException {
-
+		dbh = new DatabaseHandler();
+		dbh.resetUserStatuses();
 		int i = 0;
 
 		try {
@@ -23,7 +25,7 @@ public class Main {
 
 			while ((i++ < maxConnections) || (maxConnections == 0)) {
 				Socket clientSocket = listener.accept();
-				MiniServer mini = new MiniServer(clientSocket);
+				MiniServer mini = new MiniServer(clientSocket, dbh);
 				mini.start();
 			}
 		} catch (IOException ioe) {

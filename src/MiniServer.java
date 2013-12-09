@@ -15,7 +15,7 @@ public class MiniServer extends Thread {
 	private String jsonList;
 	private String currUser;
 
-	public MiniServer(Socket socket) {
+	public MiniServer(Socket socket, DatabaseHandler dbh) {
 		super("MiniServer");
 		this.socket = socket;
 		System.out.println("MiniSocket CREATED!");
@@ -23,8 +23,7 @@ public class MiniServer extends Thread {
 		dbs.createConnection();
 		System.out.println("DB CREATED!");
 		map = new HashMap<String, SocketAddress>();
-		dbh = new DatabaseHandler();
-		dbh.resetUserStatuses();
+		this.dbh = dbh;
 	}
 
 	public void run() {
