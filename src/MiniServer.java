@@ -37,6 +37,7 @@ public class MiniServer extends Thread {
 					socket.getInputStream()));
 //			while (true) {
 				while ((incomingMessage = in.readLine()) != null) {
+					System.out.println("Server recieved:" + incomingMessage);
 					User user = decode(incomingMessage);
 					if (map.containsKey(user.getUserId()) == false) {
 						this.currUser = user.getUserId();
