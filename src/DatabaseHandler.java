@@ -136,15 +136,15 @@ public class DatabaseHandler {
 		}
 	}
 	
-	public void inactiveUser(User user) {
+	public void inactiveUser(String userName) {
 		System.out.println("_______INACTIVATE USER________");
 		String sql = "update users set is_active=0 where userId="
-				+ "'" + user.getUserId() + "'";
+				+ "'" + userName + "'";
 		try {
 			preparedStatement = con.prepareStatement(sql);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("FAILED TO INACTIVATE USER:" + user.getUserId());
+			System.out.println("FAILED TO INACTIVATE USER:" + userName);
 			e.printStackTrace();
 		}
 	}

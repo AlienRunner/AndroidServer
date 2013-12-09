@@ -13,6 +13,7 @@ public class MiniServer extends Thread {
 	private DatabaseStarter dbs;
 	private DatabaseHandler dbh;
 	private String jsonList;
+	private String currUser;
 
 	public MiniServer(Socket socket) {
 		super("MiniServer");
@@ -38,7 +39,8 @@ public class MiniServer extends Thread {
 				while ((incomingMessage = in.readLine()) != null && socket.isConnected()) {
 					User user = decode(incomingMessage);
 					if (map.containsKey(user.getUserId()) == false) {
-						map.put(user.getUserId(), ipAddress);
+						this.currUser = user.getUserId();
+						map.put(currUser, ipAddress);
 						dbh.activeUser(user);
 						try {
 							System.out.println("Trying to add username");
@@ -62,12 +64,12 @@ public class MiniServer extends Thread {
 					out.flush();
 					System.out.println("Message sent: " + jsonList
 							+ System.getProperty("line.separator"));
-					if (socket.isConnected() == false) {
-						System.out.println("Closing connection!");
-						map.remove(user.getUserId());
-						dbh.inactiveUser(user);
-						System.out.println("Socket closed!");
-					}
+				}
+				if (socket.isConnected() == false) {
+					System.out.println("Closing connection!");
+					map.remove(this.currUser);
+					dbh.inactiveUser(this.currUser);
+					System.out.println("Socket closed!");
 				}
 //			}
 
