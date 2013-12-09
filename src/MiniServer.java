@@ -63,6 +63,7 @@ public class MiniServer extends Thread {
 					System.out.println("Message sent: " + jsonList
 							+ System.getProperty("line.separator"));
 					if (socket.isConnected() == false) {
+						System.out.println("Closing connection!");
 						map.remove(user.getUserId());
 						dbh.inactiveUser(user);
 						System.out.println("Socket closed!");
