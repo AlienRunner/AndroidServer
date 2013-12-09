@@ -39,6 +39,7 @@ public class MiniServer extends Thread {
 					User user = decode(incomingMessage);
 					if (map.containsKey(user.getUserId()) == false) {
 						map.put(user.getUserId(), ipAddress);
+						dbh.activeUser(user);
 						try {
 							System.out.println("Trying to add username");
 							if (dbh.updateDatabase(user)) {
@@ -62,6 +63,8 @@ public class MiniServer extends Thread {
 					System.out.println("Message sent: " + jsonList
 							+ System.getProperty("line.separator"));
 					if (socket.isConnected() == false) {
+						map.remove(user.getUserId());
+						dbh.inactiveUser(user);
 						System.out.println("Socket closed!");
 					}
 				}

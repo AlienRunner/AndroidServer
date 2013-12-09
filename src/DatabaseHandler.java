@@ -87,7 +87,7 @@ public class DatabaseHandler {
 		System.out.println("SET AND FETCH");
 		try {
 			String sql = "update users set xcoord=?,ycoord=? where userId="
-					+ "'" + user.getUserId() + "'";
+					+ "'" + user.getUserId() + "' and is_active = 1";
 			preparedStatement = con.prepareStatement(sql);
 			preparedStatement.setDouble(1, user.getxCoord());
 			preparedStatement.setDouble(2, user.getyCoord());
@@ -121,5 +121,29 @@ public class DatabaseHandler {
 			list.add(race);
 		}
 		return list;
+	}
+
+	public void activeUser(User user) {
+		String sql = "update users set is_active=1 where userId="
+				+ "'" + user.getUserId() + "'";
+		try {
+			preparedStatement = con.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("FAILED TO ACTIVATE USER:" + user.getUserId());
+			e.printStackTrace();
+		}
+	}
+	
+	public void inactiveUser(User user) {
+		String sql = "update users set is_active=0 where userId="
+				+ "'" + user.getUserId() + "'";
+		try {
+			preparedStatement = con.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("FAILED TO INACTIVATE USER:" + user.getUserId());
+			e.printStackTrace();
+		}
 	}
 }
