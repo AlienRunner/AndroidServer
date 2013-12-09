@@ -87,7 +87,7 @@ public class DatabaseHandler {
 		System.out.println("SET AND FETCH");
 		try {
 			String sql = "update users set xcoord=?,ycoord=? where userId="
-					+ "'" + user.getUserId() + "' and is_active = 1";
+					+ "'" + user.getUserId() + "'";
 			preparedStatement = con.prepareStatement(sql);
 			preparedStatement.setDouble(1, user.getxCoord());
 			preparedStatement.setDouble(2, user.getyCoord());
@@ -103,7 +103,7 @@ public class DatabaseHandler {
 
 	private ArrayList<String> getUserInformation() throws SQLException {
 		statement = con.createStatement();
-		resultSet = statement.executeQuery("select userId,xcoord,ycoord,race from users");
+		resultSet = statement.executeQuery("select userId,xcoord,ycoord,race from users where is_active = 1");
 		ArrayList<String> userArrayList = writeResultSet(resultSet);
 		return userArrayList;
 	}
