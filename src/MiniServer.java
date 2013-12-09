@@ -34,7 +34,7 @@ public class MiniServer extends Thread {
 					socket.getOutputStream()));
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
-			while (true) {
+//			while (true) {
 				while ((incomingMessage = in.readLine()) != null && socket.isConnected()) {
 					User user = decode(incomingMessage);
 					if (map.containsKey(user.getUserId()) == false) {
@@ -65,7 +65,7 @@ public class MiniServer extends Thread {
 						System.out.println("Socket closed!");
 					}
 				}
-			}
+//			}
 
 		} catch (Exception e) {
 			System.out.println("BufferedWriter/Reader - Error: "
