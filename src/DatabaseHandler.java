@@ -124,6 +124,7 @@ public class DatabaseHandler {
 	}
 
 	public void activeUser(User user) {
+		System.out.println("_______ACTIVATE USER________");
 		String sql = "update users set is_active=1 where userId="
 				+ "'" + user.getUserId() + "'";
 		try {
@@ -136,6 +137,7 @@ public class DatabaseHandler {
 	}
 	
 	public void inactiveUser(User user) {
+		System.out.println("_______INACTIVATE USER________");
 		String sql = "update users set is_active=0 where userId="
 				+ "'" + user.getUserId() + "'";
 		try {
