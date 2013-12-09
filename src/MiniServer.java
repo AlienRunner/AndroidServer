@@ -55,8 +55,10 @@ public class MiniServer extends Thread {
 							jsonList = "Failed to update!";
 						}
 
-					} else {
+					} else if(map.get(user.getUserId()).equals(ipAddress) == false) {
 						jsonList = "Username already in use!";
+					} else{
+						jsonList = dbh.setAndFetch(user);
 					}
 					System.out.println("ClientInfo recieved: "
 							+ incomingMessage + ". Answering...");
