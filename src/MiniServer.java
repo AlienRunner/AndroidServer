@@ -36,7 +36,7 @@ public class MiniServer extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 //			while (true) {
-				while ((incomingMessage = in.readLine()) != null && socket.isConnected()) {
+				while ((incomingMessage = in.readLine()) != null) {
 					User user = decode(incomingMessage);
 					if (map.containsKey(user.getUserId()) == false) {
 						this.currUser = user.getUserId();
@@ -65,12 +65,13 @@ public class MiniServer extends Thread {
 					System.out.println("Message sent: " + jsonList
 							+ System.getProperty("line.separator"));
 				}
-				if (socket.isConnected() == false) {
-					System.out.println("Closing connection!");
+				socket.close();
+				
+					System.out.println("Closing connection!" + ipAddress);
 					map.remove(this.currUser);
 					dbh.inactiveUser(this.currUser);
 					System.out.println("Socket closed!");
-				}
+				
 //			}
 
 		} catch (Exception e) {
