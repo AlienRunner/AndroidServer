@@ -148,4 +148,16 @@ public class DatabaseHandler {
 			e.printStackTrace();
 		}
 	}
+	
+	public void resetUserStatuses() {
+		System.out.println("_______Resetting statuses________");
+		String sql = "update users set is_active=0";
+		try {
+			preparedStatement = con.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("FAILED TO RESET STATUSES:");
+			e.printStackTrace();
+		}
+	}
 }

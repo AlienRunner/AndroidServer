@@ -24,6 +24,7 @@ public class MiniServer extends Thread {
 		System.out.println("DB CREATED!");
 		map = new HashMap<String, SocketAddress>();
 		dbh = new DatabaseHandler();
+		dbh.resetUserStatuses();
 	}
 
 	public void run() {
@@ -80,6 +81,7 @@ public class MiniServer extends Thread {
 			e.printStackTrace();
 		}
 	}
+	
 	// @return User-object
 	private User decode(String clientMsg){
 		clientMsg = clientMsg.replace("[", "");
