@@ -103,10 +103,10 @@ public class DatabaseHandler {
 
 	private ArrayList<String> getUserInformation(User user) throws SQLException {
 		statement = con.createStatement();
-		String sql = "select userId,xcoord,ycoord,race from users where is_active = 1 and userId <>"
-				+ "'" + user.getUserId() + "'";
-		resultSet = statement.executeQuery(sql);
-//		resultSet = statement.executeQuery("select userId,xcoord,ycoord,race from users where is_active = 1");
+//		String sql = "select userId,xcoord,ycoord,race from users where is_active = 1 and userId <>"
+//				+ "'" + user.getUserId() + "'";
+//		resultSet = statement.executeQuery(sql);
+		resultSet = statement.executeQuery("select userId,xcoord,ycoord,race from users where is_active = 1");
 		
 		ArrayList<String> userArrayList = writeResultSet(resultSet);
 		return userArrayList;

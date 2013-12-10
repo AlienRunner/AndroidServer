@@ -61,8 +61,7 @@ public class MiniServer extends Thread {
 					} else{
 						jsonList = dbh.setAndFetch(user);
 					}
-					System.out.println("ClientInfo recieved: "
-							+ incomingMessage + ". Answering...");
+					System.out.println(". Answering with..." + jsonList);
 					out.write(jsonList + System.getProperty("line.separator"));
 					out.flush();
 					System.out.println("Message sent: " + jsonList
