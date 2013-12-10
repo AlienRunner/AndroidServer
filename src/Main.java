@@ -23,6 +23,7 @@ public class Main {
 			ServerSocket listener = new ServerSocket(port);
 			while ((i++ < maxConnections) || (maxConnections == 0)) {
 				Socket clientSocket = listener.accept();
+				System.out.println("Client Connected" + clientSocket.getRemoteSocketAddress());
 				MiniServer mini = new MiniServer(clientSocket, dbh);
 				mini.start();
 			}

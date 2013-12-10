@@ -92,7 +92,7 @@ public class DatabaseHandler {
 			preparedStatement.setDouble(1, user.getxCoord());
 			preparedStatement.setDouble(2, user.getyCoord());
 			preparedStatement.executeUpdate();
-			list = getUserInformation();
+			list = getUserInformation(user);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,9 +101,13 @@ public class DatabaseHandler {
 		return s;
 	}
 
-	private ArrayList<String> getUserInformation() throws SQLException {
+	private ArrayList<String> getUserInformation(User user) throws SQLException {
 		statement = con.createStatement();
-		resultSet = statement.executeQuery("select userId,xcoord,ycoord,race from users where is_active = 1");
+		String sql = "select userId,xcoord,ycoord,race from users where is_active = 1 and userId <>"
+				+ "'" + user.getUserId() + "'";
+		resultSet = statement.executeQuery(sql);
+//		resultSet = statement.executeQuery("select userId,xcoord,ycoord,race from users where is_active = 1");
+		
 		ArrayList<String> userArrayList = writeResultSet(resultSet);
 		return userArrayList;
 	}
