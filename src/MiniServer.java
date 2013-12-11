@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -35,8 +36,11 @@ public class MiniServer extends Thread {
 					socket.getOutputStream()));
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
-//			while (true) {
-				while ((incomingMessage = in.readLine()) != null) {
+			// while (true) {
+			while (socket.isConnected()) {
+				incomingMessage = in.readLine();
+				if (incomingMessage != null) {
+
 					System.out.println("Server recieved:" + incomingMessage);
 					User user = decode(incomingMessage);
 					if (map.containsKey(user.getUserId()) == false) {
@@ -56,9 +60,9 @@ public class MiniServer extends Thread {
 							jsonList = "Failed to update!";
 						}
 
-					} else if(map.get(user.getUserId()).equals(ipAddress) == false) {
+					} else if (map.get(user.getUserId()).equals(ipAddress) == false) {
 						jsonList = "Username already in use!";
-					} else{
+					} else {
 						jsonList = dbh.setAndFetch(user);
 					}
 					System.out.println(". Answering with..." + jsonList);
@@ -67,28 +71,41 @@ public class MiniServer extends Thread {
 					System.out.println("Message sent: " + jsonList
 							+ System.getProperty("line.separator"));
 				}
-				socket.close();
-				
-					System.out.println("Closing connection!" + ipAddress);
-					map.remove(this.currUser);
-					dbh.inactiveUser(this.currUser);
-					System.out.println("Socket closed!");
-				
-//			}
+			}
+			socket.close();
+
+			System.out.println("Closing connection!" + ipAddress);
+			map.remove(this.currUser);
+			dbh.inactiveUser(this.currUser);
+			System.out.println("Socket closed!");
+
+			// }
 
 		} catch (Exception e) {
+			try {
+				socket.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.out.println("Closing connection caused by error!"
+					+ ipAddress);
+			map.remove(this.currUser);
+			dbh.inactiveUser(this.currUser);
+			System.out.println("Socket closed!");
 			System.out.println("BufferedWriter/Reader - Error: "
 					+ e.getMessage());
 			e.printStackTrace();
 		}
 	}
-	
+
 	// @return User-object
-	private User decode(String clientMsg){
+	private User decode(String clientMsg) {
 		clientMsg = clientMsg.replace("[", "");
 		clientMsg = clientMsg.replace("]", "");
 		String[] userInfo = clientMsg.split(",");
-		User user = new User(userInfo[0], Double.parseDouble(userInfo[1]), Double.parseDouble(userInfo[2]), userInfo[3]);
+		User user = new User(userInfo[0], Double.parseDouble(userInfo[1]),
+				Double.parseDouble(userInfo[2]), userInfo[3]);
 		return user;
 	}
 }
